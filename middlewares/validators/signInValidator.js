@@ -5,13 +5,13 @@ exports.signInValidator = async (req, res, next) => {
   try {
     const errors = [];
 
-    if (validator.isEmpty(req.body.email)) {
-      errors.push("Please input your password");
+    if (validator.isEmpty(req.body.user_name)) {
+      errors.push("Please input your user name");
     }
 
-    if (!validator.isEmail(req.body.email)) {
-      errors.push("Email is not valid");
-    }
+    // if (!validator.isEmail(req.body.email)) {
+    //   errors.push("Email is not valid");
+    // }
 
     if (validator.isEmpty(req.body.password)) {
       errors.push("Please input your password");

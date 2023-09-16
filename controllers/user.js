@@ -28,13 +28,21 @@ class User {
 
   async createUser(req, res, next) {
     try {
-      const { email, first_name, last_name, password } = req.body;
+      const {user_name, email, name, no_hp, password,repassword } = req.body;
+      if (password != repassword) {
+        return res.status(401).json({
+          success: false,
+          errors: ["Password must be same"],
+        });
+      }
+
       const hashPassword = encodePin(password);
 
       await user.create({
+        user_name:user_name,
         email: email,
-        first_name: first_name,
-        last_name: last_name,
+        name: name,
+        no_hp: no_hp,
         password: hashPassword,
       });
 
@@ -113,12 +121,12 @@ class User {
 
   async login(req, res, next) {
     try {
-      const email = req.body.email;
+      const user_name = req.body.user_name;
       const password = req.body.password;
 
       const loginUser = await user.findOne({
         where: {
-          email: email,
+          user_name: user_name,
         },
       });
 
@@ -141,7 +149,9 @@ class User {
 
       const payload = {
         id: loginUser.dataValues.id,
-        email: loginUser.dataValues.email,
+        user_name: loginUser.dataValues.user_name,
+        name:loginUser.dataValues.name,
+        email:loginUser.dataValues.email,
       };
       const token = createToken(payload);
       res.status(200).json({
